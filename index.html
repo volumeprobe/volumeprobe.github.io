@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!-- Adapted from Nerfies (CC BY-SA 4.0), with CardioFAD resource and method styling. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="VolumeProbe: Where to Look Matters. Anatomy-aware, informative, and diverse sub-volume sampling for 3D medical self-supervised learning. NeurIPS 2026.">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="VolumeProbe | NeurIPS 2026">
+  <meta property="og:description" content="Better observations for 3D medical self-supervised learning, with the same crop budget.">
+  <title>VolumeProbe | NeurIPS 2026</title>
+  <link rel="icon" href="static/images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="static/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css?v=20261012-softcards">
+  <link rel="stylesheet" href="static/css/figure-lightbox.css">
+  <link rel="stylesheet" href="static/css/results.css?v=20261012-compact">
+  <link rel="stylesheet" href="static/css/performance-bars.css">
+  <link rel="stylesheet" href="static/css/method-player.css?v=20261012-panel">
+  <link rel="stylesheet" href="static/css/analysis-interactive.css?v=20261012-analysis7">
+  <script src="static/js/config.js?v=20261012-analysis" defer></script>
+  <script src="static/js/results-data.js" defer></script>
+  <script src="static/js/results.js?v=20261012-compact" defer></script>
+  <script src="static/js/performance-bars.js" defer></script>
+  <script src="static/js/figure-lightbox.js?v=20261012-analysis" defer></script>
+  <script src="static/js/index.js" defer></script>
+  <script src="static/js/analysis-regions.js?v=20261012-analysis7" defer></script>
+  <script src="static/js/analysis-cases.js?v=20261012-analysis4" defer></script>
+  <script src="static/js/analysis-interactive.js?v=20261012-analysis6" defer></script>
+  <script src="static/js/method-player.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="wordmark" href="#top" aria-label="VolumeProbe home">VolumeProbe</a>
+      <div class="nav-links">
+        <a href="#abstract">Abstract</a>
+        <a href="#motivation">Motivation</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#analysis">Analysis</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero publication-header" id="top" aria-labelledby="paper-title">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1 class="publication-title" id="paper-title">
+                <span class="project-name">VolumeProbe</span>
+                <span class="paper-title">Where to Look Matters:<br>Rethinking Sub-Volume Sampling<br class="desktop-break"> in 3D Medical Self-supervised Learning</span>
+              </h1>
+              <div class="publication-metadata">
+                <div class="is-size-5 publication-authors">
+                  <span class="author-block"><a href="https://scholar.google.com/citations?user=w6XeRtAAAAAJ" target="_blank" rel="noopener noreferrer">Junkai Liu</a>,</span>
+                  <span class="author-block"><a href="https://scholar.google.com/citations?hl=en&amp;user=gpbEdHEAAAAJ" target="_blank" rel="noopener noreferrer">Le Zhang</a><sup title="Corresponding author">†</sup></span>
+                </div>
+                <div class="publication-authors publication-affiliations">School of Engineering, University of Birmingham</div>
+                <p class="publication-venue"><strong>NeurIPS 2026</strong></p>
+                <div class="column has-text-centered">
+                  <div class="publication-links" aria-label="Research resources">
+                    <span class="link-block"><a class="external-link resource-link unavailable" id="paper-link" role="link" aria-disabled="true" tabindex="-1" title="Paper link to be added"><span class="resource-emoji" aria-hidden="true">📄</span><span>Paper</span></a></span>
+                    <span class="link-block"><a class="external-link resource-link unavailable" id="arxiv-link" role="link" aria-disabled="true" tabindex="-1" title="arXiv link to be added"><span class="resource-icon"><i class="ai ai-arxiv" aria-hidden="true"></i></span><span>arXiv</span></a></span>
+                    <span class="link-block"><a class="external-link resource-link" id="code-link" href="https://github.com/JK-Liu7/VolumeProbe" target="_blank" rel="noopener noreferrer"><span class="resource-icon"><i class="fab fa-github" aria-hidden="true"></i></span><span>Code</span></a></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="teaser" aria-label="Overview">
+      <div class="container page-width">
+        <div class="tldr">
+          <header class="section-heading overview-heading">
+            <p class="section-eyebrow">01 · Overview</p>
+            <h2 class="tldr-title">TL;DR</h2>
+          </header>
+          <p class="tldr-copy"><strong>VolumeProbe</strong> improves 3D medical SSL by replacing random crops with <strong>anatomically plausible, informative, and diverse</strong> sub-volumes.</p>
+        </div>
+        <figure class="paper-figure">
+          <div class="media-slot teaser-slot" data-image="teaser" data-alt="Figure 1. VolumeProbe reallocates the same crop budget toward better observations.">
+            <div class="media-placeholder"><span class="placeholder-index">FIGURE 1</span><span class="placeholder-title">Teaser</span></div>
+          </div>
+          <figcaption>Same crop budget. Better observations.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section abstract-section" id="abstract" aria-labelledby="abstract-title">
+      <div class="container text-width">
+        <h2 class="title abstract-title" id="abstract-title">Abstract</h2>
+        <p class="abstract-copy">Self-supervised learning on 3D medical images commonly relies on random sub-volume sampling during pretraining. However, random cropping implicitly treats all spatial regions as equally worth observing, despite anatomical priors and spatial redundancy that make regions inherently unequal in their value for representation learning. To this end, we first show through controlled crop-quality manipulations that better sub-volumes lead to better downstream transfer, revealing the observation policy as an overlooked bottleneck in 3D medical SSL. Motivated by this finding, we revisit sub-volume sampling as a where-to-look problem. We propose VolumeProbe, a plug-and-play framework that replaces random cropping with an offline coarse-to-fine probe bank guided by anatomy-awareness, informativeness, and diversity. We instantiate VolumeProbe as a lightweight Lite variant using geometric and image-statistical cues, and a diagnostic Feat variant using frozen visual features, to examine whether lightweight volume-intrinsic priors suffice or richer semantic cues reliably provide additional value. Extensive experiments across multiple 3D medical SSL backbones and downstream tasks demonstrate that VolumeProbe-Lite consistently improves transfer performance over random sampling. Mechanistic analyses further link these gains to more anatomically plausible and informative observations, reduced spatial redundancy, more efficient learning dynamics, and more structured representations.</p>
+      </div>
+    </section>
+
+    <section class="section motivation-section" id="motivation" aria-labelledby="motivation-title">
+      <div class="container page-width">
+        <header class="section-heading">
+          <p class="section-eyebrow">02 · Motivation</p>
+          <h2 class="section-headline" id="motivation-title"><span class="headline-line">A fixed crop budget.</span> <span class="headline-line gradient-text">Unequal observations.</span></h2>
+          <p class="section-lead">Random crops can miss organ-rich structures and revisit redundant regions. Controlled experiments show that better observations lead to better transfer.</p>
+        </header>
+        <figure class="paper-figure">
+          <div class="media-slot motivation-slot" data-image="motivation" data-alt="Figure 2. Controlled crop-quality experiments relate observation quality to downstream transfer and learning efficiency.">
+            <div class="media-placeholder"><span class="placeholder-index">FIGURE 2</span><span class="placeholder-title">Why crop quality matters</span></div>
+          </div>
+          <figcaption>Where should a 3D medical SSL model look?</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section method-section" id="method" aria-labelledby="method-title">
+      <div class="container page-width">
+        <header class="section-heading">
+          <p class="section-eyebrow">03 · Method</p>
+          <h2 class="section-headline" id="method-title"><span class="headline-line">Better observations,</span> <span class="headline-line gradient-text">three simple principles.</span></h2>
+        </header>
+        <div class="method-overview" aria-label="Three sampling principles">
+          <article class="method-card anatomy-card"><span class="principle-number">01</span><h3>Anatomy-awareness</h3><p>Favor anatomically plausible regions with spatial priors and boundary suppression.</p></article>
+          <article class="method-card information-card"><span class="principle-number">02</span><h3>Informativeness</h3><p>Prioritize structural content using local gradient and intensity-entropy cues.</p></article>
+          <article class="method-card diversity-card"><span class="principle-number">03</span><h3>Diversity</h3><p>Penalize overlapping candidates to preserve coverage and reduce redundancy.</p></article>
+        </div>
+        <figure class="paper-figure">
+          <div class="media-slot framework-slot" data-image="framework" data-alt="Figure 3. Coarse-to-fine candidates are scored and selected into an offline probe bank. Pretraining samples cached centers with local jitter.">
+            <div class="media-placeholder"><span class="placeholder-index">FIGURE 3</span><span class="placeholder-title">VolumeProbe framework</span></div>
+          </div>
+          <figcaption>Generate candidates → score and select → cache a probe bank → sample during pretraining.</figcaption>
+        </figure>
+        <p class="method-note"><strong>VolumeProbe-Lite</strong> uses geometry and image statistics. <strong>VolumeProbe-Feat</strong> tests frozen visual features as a diagnostic variant.</p>
+        <div class="paper-figure animation-figure method-walkthrough" id="method-walkthrough" aria-labelledby="walkthrough-title">
+          <div class="subsection-heading"><h3 id="walkthrough-title">How VolumeProbe Works</h3></div>
+          <div class="method-chapters" role="group" aria-label="Animation chapters">
+            <button class="method-chapter" type="button" data-method-chapter="0" aria-current="step" aria-controls="method-video method-chapter-detail" disabled><span class="chapter-number">01</span><span class="chapter-name">Why sampling matters</span></button>
+            <button class="method-chapter" type="button" data-method-chapter="8" aria-controls="method-video method-chapter-detail" disabled><span class="chapter-number">02</span><span class="chapter-name">Find candidates</span></button>
+            <button class="method-chapter" type="button" data-method-chapter="24" aria-controls="method-video method-chapter-detail" disabled><span class="chapter-number">03</span><span class="chapter-name">Build the bank</span></button>
+            <button class="method-chapter" type="button" data-method-chapter="42" aria-controls="method-video method-chapter-detail" disabled><span class="chapter-number">04</span><span class="chapter-name">Sample and train</span></button>
+          </div>
+          <div class="method-player" data-method-player>
+            <div class="method-stage">
+              <video id="method-video" controls muted playsinline preload="metadata" poster="static/images/method-poster.jpg?v=20261012-readable" aria-label="How VolumeProbe works: a silent, four-chapter method animation" aria-describedby="method-chapter-detail">
+                <source src="static/videos/volumeprobe-how-it-works.mp4?v=20261012-readable" type="video/mp4">
+                <p>Your browser cannot play this animation. <a href="static/videos/volumeprobe-how-it-works.mp4?v=20261012-readable">Open the video</a> or <a href="static/images/method-poster.jpg?v=20261012-readable">view the static overview</a>.</p>
+              </video>
+            </div>
+            <div class="method-start-row"><button class="method-start" type="button" data-method-start aria-controls="method-video" hidden><span aria-hidden="true">▶</span> Play walkthrough</button></div>
+            <div class="method-controls" data-method-controls hidden>
+              <button class="method-control method-toggle" type="button" data-method-toggle aria-label="Play animation" aria-controls="method-video"><svg data-method-play-icon viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg data-method-pause-icon viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg></button>
+              <button class="method-control method-replay" type="button" data-method-replay aria-label="Replay animation from the beginning" aria-controls="method-video"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7V3M5 7h4M5 7a8 8 0 1 1-1 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Replay</span></button>
+              <label class="sr-only" for="method-progress">Animation progress</label>
+              <input class="method-progress" id="method-progress" type="range" min="0" max="52" step="0.1" value="0" aria-controls="method-video" aria-valuetext="0 seconds of 52 seconds">
+              <span class="method-time" data-method-time aria-hidden="true">0:00 / 0:52</span>
+              <button class="method-control method-fullscreen" type="button" data-method-fullscreen aria-label="Enter fullscreen" aria-controls="method-video" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+          </div>
+          <p class="method-player-message" data-method-message role="status" hidden></p>
+          <p class="method-player-error" data-method-error hidden>The animation could not be loaded. <a href="static/images/method-poster.jpg?v=20261012-readable">View the static overview</a> or read the chapter descriptions below.</p>
+          <div class="method-chapter-detail" id="method-chapter-detail">
+            <article data-method-detail="0"><p class="method-detail-label">01 · Why sampling matters</p><h4>Same crop budget. Better observations.</h4><p>Use the same crop budget to sample anatomically plausible, informative, and diverse regions.</p></article>
+            <article data-method-detail="8" hidden><p class="method-detail-label">02 · Find candidates</p><h4>Rank regions. Refine candidates.</h4><p>Keep the top 24 of 32 regions, then refine and re-score their centers and axial neighbors.</p></article>
+            <article data-method-detail="24" hidden><p class="method-detail-label">03 · Build the bank</p><h4>Balance quality and coverage.</h4><p>Select and cache 40 crop centers, balancing anatomy and information with a soft redundancy penalty.</p></article>
+            <article data-method-detail="42" hidden><p class="method-detail-label">04 · Sample and train</p><h4>Build once. Sample throughout training.</h4><p>Sample a cached center uniformly, add local jitter, and crop. The bank, backbone, and objective stay fixed.</p></article>
+          </div>
+          <details class="method-variants">
+            <summary>Lite and Feat <span>Same pipeline, different scoring cues</span></summary>
+            <div><p><strong>VolumeProbe-Lite</strong>, shown above, uses geometric priors and image statistics: position and boundary distance for anatomy-awareness, and gradient and entropy cues for informativeness. It requires no organ segmentation.</p><p><strong>VolumeProbe-Feat</strong> is a diagnostic variant using a frozen encoder, prototype similarity (ProtoSim), and feature variance (FeatVar). Both variants share candidate refinement, bank construction, and sampling.</p></div>
+          </details>
+          <noscript><p class="no-script">Use the video’s native controls to watch the walkthrough. The four stages are candidate refinement, greedy selection with a soft redundancy penalty, caching 40 normalized crop centers, and uniform sampling with local jitter during pretraining. The bank remains fixed.</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <section class="section results-section" id="results" aria-labelledby="results-title">
+      <div class="container page-width">
+        <header class="section-heading">
+          <p class="section-eyebrow">04 · Results</p>
+          <h2 class="section-headline" id="results-title"><span class="headline-line">Consistent transfer gains.</span> <span class="headline-line gradient-text">Especially with fewer labels.</span></h2>
+        </header>
+        <div class="result-highlights" aria-label="Main-table result highlights">
+          <article class="result-highlight highlight-green"><h3>Low-label segmentation</h3><p class="highlight-value">+4.69<span> Dice points</span></p><p class="highlight-detail">WORD · 1% labels</p><p class="highlight-note">VoCo → VoCo + Lite · 64.24 → 68.93</p></article>
+          <article class="result-highlight highlight-blue"><h3>Consistent improvements</h3><p class="highlight-value">45 / 45</p><p class="highlight-detail">Backbone–setting comparisons</p><p class="highlight-note">Lite improves each matched SSL baseline</p></article>
+          <article class="result-highlight highlight-purple"><h3>Across downstream tasks</h3><p class="highlight-value">7<span> datasets · </span>3<span> tasks</span></p><p class="highlight-detail"><span class="highlight-task-label" title="Segmentation · classification · registration"><span class="highlight-task-original">Segmentation · classification · registration</span><span class="highlight-task-short" aria-hidden="true">Seg. · Cls. · Reg.</span></span></p><p class="highlight-note">VoCo · S2DC · MedGMAE</p></article>
+        </div>
+        <div id="performance-bars" hidden></div>
+        <div id="quantitative-results"></div>
+        <noscript><p class="no-script">Enable JavaScript to explore Tables 1 and 2 by task, dataset, and method. All values are also available in <a href="static/js/results-data.js">the table data file</a>.</p></noscript>
+      </div>
+    </section>
+
+    <section class="section analysis-section" id="analysis" aria-labelledby="analysis-title">
+      <div class="container page-width">
+        <header class="section-heading">
+          <p class="section-eyebrow">05 · Analysis</p>
+          <h2 class="section-headline" id="analysis-title">Why <span class="gradient-text">better observations</span> help.</h2>
+        </header>
+        <div class="analysis-grid">
+          <article class="analysis-item analysis-wide" id="analysis-cases">
+            <div class="analysis-heading"><span class="analysis-number">01</span><h3>Anatomy-aware sampling in practice</h3></div>
+            <figure class="paper-figure"><div class="media-slot case-study-slot" data-image="analysisCases" data-alt="Figure 5. Representative BTCV and TotalSegmentator cases comparing Random and VolumeProbe: 3D crop boxes, coronal projections, sampled views, and foreground/organ occupancy."><div class="media-placeholder"><span class="placeholder-index">FIGURE 5</span><span class="placeholder-title">Representative sampling cases</span></div></div><figcaption>Random vs. VolumeProbe on BTCV and TotalSegmentator: 3D crop locations, coronal projections, and sampled views.</figcaption></figure>
+          </article>
+          <article class="analysis-item analysis-anatomy" id="analysis-anatomy">
+            <div class="analysis-heading"><span class="analysis-number">02</span><h3>More anatomy in each observation</h3></div>
+            <figure class="paper-figure"><div class="media-slot analysis-slot" data-image="analysisAnatomy" data-alt="Figure 4. Anatomy-aware analysis of organ occupancy and crop-center distributions."><div class="media-placeholder"><span class="placeholder-index">FIGURE 4</span><span class="placeholder-title">Anatomy-awareness</span></div></div><figcaption>Probe centers better align with organ-rich regions.</figcaption></figure>
+          </article>
+          <article class="analysis-item analysis-information" id="analysis-information">
+            <div class="analysis-heading"><span class="analysis-number">03</span><h3>More useful evidence</h3></div>
+            <figure class="paper-figure"><div class="media-slot analysis-slot" data-image="analysisInformation" data-alt="Figure 6. Informativeness analysis of cumulative image utility and anatomical utility."><div class="media-placeholder"><span class="placeholder-index">FIGURE 6</span><span class="placeholder-title">Informativeness</span></div></div><figcaption>More structural information within the same crop budget.</figcaption></figure>
+          </article>
+          <article class="analysis-item analysis-diversity" id="analysis-diversity">
+            <div class="analysis-heading"><span class="analysis-number">04</span><h3>Broader coverage, less repetition</h3></div>
+            <figure class="paper-figure"><div class="media-slot analysis-slot" data-image="analysisDiversity" data-alt="Figure 7. Diversity analysis comparing within-bank coverage and redundancy."><div class="media-placeholder"><span class="placeholder-index">FIGURE 7</span><span class="placeholder-title">Coverage &amp; redundancy</span></div></div><figcaption>Diversity keeps the bank from clustering around a few locations.</figcaption></figure>
+          </article>
+          <article class="analysis-item analysis-association" id="analysis-association">
+            <div class="analysis-heading"><span class="analysis-number">05</span><h3>The principles work together</h3></div>
+            <figure class="paper-figure"><div class="media-slot analysis-slot" data-image="analysisAssociation" data-alt="Figure 9. Cross-strategy associations between sampling diagnostics and downstream Dice."><div class="media-placeholder"><span class="placeholder-index">FIGURE 9</span><span class="placeholder-title">Cross-strategy association</span></div></div><figcaption>Joint observation quality is more closely associated with downstream Dice.</figcaption></figure>
+          </article>
+          <article class="analysis-item analysis-wide analysis-learning" id="analysis-learning">
+            <div class="analysis-heading"><span class="analysis-number">06</span><h3>Better crops, better representations</h3></div>
+            <figure class="paper-figure"><div class="media-slot learning-slot" data-image="analysisLearning" data-alt="Figure 8. Early learning curves, representation diversity, and structure-aligned feature maps."><div class="media-placeholder"><span class="placeholder-index">FIGURE 8</span><span class="placeholder-title">Learning dynamics &amp; representations</span></div></div><figcaption>More efficient early learning and less redundant, more structure-aligned features.</figcaption></figure>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section citation-section" id="bibtex" aria-labelledby="bibtex-title">
+      <div class="container is-max-desktop content">
+        <header class="section-heading">
+          <p class="section-eyebrow">06 · Citation</p>
+          <div class="citation-header">
+            <h2 class="title" id="bibtex-title">BibTeX</h2>
+          </div>
+        </header>
+        <div class="citation-box">
+          <button class="citation-copy" id="copy-bibtex" type="button" aria-label="Copy BibTeX" aria-describedby="bibtex-copy-status" title="BibTeX is not available yet." disabled><i class="fas fa-copy" data-copy-icon aria-hidden="true"></i></button>
+          <pre aria-label="BibTeX citation"><code id="bibtex-code"></code></pre>
+        </div>
+        <span class="sr-only" id="bibtex-copy-status" role="status" aria-live="polite" aria-atomic="true"></span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>The website template is borrowed from <a href="https://github.com/nerfies/nerfies.github.io" target="_blank" rel="noopener noreferrer">Nerfies website template</a> under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <dialog class="figure-lightbox" id="figure-lightbox" aria-label="Expanded figure" aria-describedby="figure-lightbox-caption">
+    <button class="figure-lightbox-close" type="button" aria-label="Close expanded figure" autofocus><span aria-hidden="true">×</span></button>
+    <figure class="figure-lightbox-content">
+      <div class="figure-lightbox-media"></div>
+      <figcaption class="figure-lightbox-caption" id="figure-lightbox-caption"></figcaption>
+    </figure>
+  </dialog>
+  <a class="back-to-top is-inactive" href="#top" aria-label="Back to top" title="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 20V4m-7 7 7-7 7 7"/></svg>
+  </a>
+</body>
+</html>
