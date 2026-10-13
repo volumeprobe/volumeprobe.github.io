@@ -19,6 +19,7 @@
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let ready = false;
   let visible = false;
+  let visibleForAutoplay = false;
   let attemptedAutoplay = false;
   let automaticallyPaused = false;
   let userPaused = false;
@@ -94,7 +95,7 @@
     syncPlayback();
   };
   const considerAutoplay = () => {
-    if (!ready || failed || !visible || document.hidden || motion.matches || userPaused || video.ended) return;
+    if (!ready || failed || !visibleForAutoplay || document.hidden || motion.matches || userPaused || video.ended) return;
     if (automaticallyPaused || !attemptedAutoplay) {
       attemptedAutoplay = true;
       play();
@@ -175,10 +176,13 @@
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(entries => {
       const entry = entries[entries.length - 1];
-      visible = entry.isIntersecting && entry.intersectionRatio >= 0.25;
-      if (visible) considerAutoplay();
-      else pauseAutomatically();
-    }, { threshold: 0.25 });
+      // Start with both comparison rows in view; keep playing while the reader
+      // scrolls slightly. Separate thresholds avoid rapid pause/resume changes.
+      visible = entry.isIntersecting && entry.intersectionRatio >= 0.15;
+      visibleForAutoplay = entry.isIntersecting && entry.intersectionRatio >= 0.55;
+      if (!visible) pauseAutomatically();
+      else if (visibleForAutoplay) considerAutoplay();
+    }, { threshold: [0.15, 0.55] });
     observer.observe(video);
   } else {
     // Older browsers keep a manual player with the same controls.

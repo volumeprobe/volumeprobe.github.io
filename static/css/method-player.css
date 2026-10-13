@@ -1,6 +1,7 @@
 /* Self-contained, progressively enhanced method walkthrough. */
 .method-walkthrough{margin-top:38px}
 .paper-figure.method-walkthrough{width:93.5%;max-width:1009.8px;margin-inline:auto}
+.method-walkthrough + .paper-figure{margin-top:38px}
 .method-walkthrough .subsection-heading{margin-bottom:18px}
 .method-chapters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:13px}
 .method-chapter{position:relative;display:grid;grid-template-columns:auto 1fr;align-content:center;align-items:baseline;column-gap:8px;min-height:50px;padding:8px 13px;text-align:left;border:1.5px solid #e3e8ef;border-radius:9px;background:#fafbfd;color:#5f6b7d;cursor:pointer;font-size:16px;font-weight:600;line-height:1.4;transition:background .2s,border-color .2s,color .2s}
