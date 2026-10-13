@@ -4,28 +4,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="VolumeProbe: Where to Look Matters. Anatomy-aware, informative, and diverse sub-volume sampling for 3D medical self-supervised learning. NeurIPS 2026.">
+  <meta name="description" content="VolumeProbe replaces random cropping with training-free, plug-and-play sampling for 3D medical SSL. Same crop budget, unchanged backbone and training objective. NeurIPS 2026.">
   <meta name="theme-color" content="#ffffff">
   <meta property="og:type" content="website">
   <meta property="og:title" content="VolumeProbe | NeurIPS 2026">
-  <meta property="og:description" content="Better observations for 3D medical self-supervised learning, with the same crop budget.">
+  <meta property="og:description" content="Better observations make better representations. Training-free, plug-and-play sampling with the same crop budget and unchanged SSL backbone and objective.">
   <title>VolumeProbe | NeurIPS 2026</title>
   <link rel="icon" href="static/images/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="static/css/bulma.min.css">
   <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="static/css/academicons.min.css">
-  <link rel="stylesheet" href="static/css/index.css?v=20261012-softcards">
+  <link rel="stylesheet" href="static/css/index.css?v=20261013-disclosures">
   <link rel="stylesheet" href="static/css/figure-lightbox.css">
-  <link rel="stylesheet" href="static/css/results.css?v=20261012-compact">
+  <link rel="stylesheet" href="static/css/results.css?v=20261013-disclosures">
   <link rel="stylesheet" href="static/css/performance-bars.css">
-  <link rel="stylesheet" href="static/css/method-player.css?v=20261013-explanatory-final">
+  <link rel="stylesheet" href="static/css/method-player.css?v=20261013-disclosures">
   <link rel="stylesheet" href="static/css/analysis-interactive.css?v=20261012-analysis7">
-  <script src="static/js/config.js?v=20261013-explanatory-final" defer></script>
+  <script src="static/js/config.js?v=20261013-sampling-labels" defer></script>
   <script src="static/js/results-data.js" defer></script>
-  <script src="static/js/results.js?v=20261012-compact" defer></script>
+  <script src="static/js/results.js?v=20261013-disclosures" defer></script>
   <script src="static/js/performance-bars.js" defer></script>
   <script src="static/js/figure-lightbox.js?v=20261012-analysis" defer></script>
-  <script src="static/js/index.js" defer></script>
+  <script src="static/js/index.js?v=20261013-content" defer></script>
   <script src="static/js/analysis-regions.js?v=20261012-analysis7" defer></script>
   <script src="static/js/analysis-cases.js?v=20261012-analysis4" defer></script>
   <script src="static/js/analysis-interactive.js?v=20261012-analysis6" defer></script>
@@ -82,9 +82,12 @@
         <div class="tldr">
           <header class="section-heading overview-heading">
             <p class="section-eyebrow">01 · Overview</p>
-            <h2 class="tldr-title">TL;DR</h2>
+            <h2 class="tldr-title">Better observations make better representations.</h2>
           </header>
-          <p class="tldr-copy"><strong>VolumeProbe</strong> improves 3D medical SSL by replacing random crops with <strong>anatomically plausible, informative, and diverse</strong> sub-volumes.</p>
+          <div class="tldr-copy">
+            <p><strong>VolumeProbe</strong> replaces random cropping with an offline probe bank per volume, improving 3D medical SSL <strong>without changing the backbone or training objective.</strong></p>
+            <ul class="tldr-facts" aria-label="Sampling properties"><li>Training-free sampling</li><li>Plug-and-play</li><li>Same crop budget</li></ul>
+          </div>
         </div>
         <figure class="paper-figure">
           <div class="media-slot teaser-slot" data-image="teaser" data-alt="Figure 1. VolumeProbe reallocates the same crop budget toward better observations.">
@@ -92,13 +95,12 @@
           </div>
           <figcaption>Same crop budget. Better observations.</figcaption>
         </figure>
-      </div>
-    </section>
-
-    <section class="section abstract-section" id="abstract" aria-labelledby="abstract-title">
-      <div class="container text-width">
-        <h2 class="title abstract-title" id="abstract-title">Abstract</h2>
-        <p class="abstract-copy">Self-supervised learning on 3D medical images commonly relies on random sub-volume sampling during pretraining. However, random cropping implicitly treats all spatial regions as equally worth observing, despite anatomical priors and spatial redundancy that make regions inherently unequal in their value for representation learning. To this end, we first show through controlled crop-quality manipulations that better sub-volumes lead to better downstream transfer, revealing the observation policy as an overlooked bottleneck in 3D medical SSL. Motivated by this finding, we revisit sub-volume sampling as a  <strong>where-to-look</strong> problem. We propose <strong>VolumeProbe</strong>, a plug-and-play framework that replaces random cropping with an offline coarse-to-fine probe bank guided by <strong>anatomy-awareness, informativeness, and diversity</strong>. We instantiate VolumeProbe as a lightweight <strong>Lite</strong> variant using geometric and image-statistical cues, and a diagnostic <strong>Feat</strong> variant using frozen visual features, to examine whether lightweight volume-intrinsic priors suffice or richer semantic cues reliably provide additional value. Extensive experiments across multiple 3D medical SSL backbones and downstream tasks demonstrate that <strong>VolumeProbe-Lite</strong> consistently improves transfer performance over random sampling. Mechanistic analyses further link these gains to more anatomically plausible and informative observations, reduced spatial redundancy, more efficient learning dynamics, and more structured representations.</p>
+        <details class="content-disclosure abstract-disclosure" id="abstract">
+          <summary id="abstract-title">Read the full abstract</summary>
+          <div class="disclosure-content">
+            <p class="abstract-copy">Self-supervised learning on 3D medical images commonly relies on random sub-volume sampling during pretraining. However, random cropping implicitly treats all spatial regions as equally worth observing, despite anatomical priors and spatial redundancy that make regions inherently unequal in their value for representation learning. To this end, we first show through controlled crop-quality manipulations that better sub-volumes lead to better downstream transfer, revealing the observation policy as an overlooked bottleneck in 3D medical SSL. Motivated by this finding, we revisit sub-volume sampling as a  <strong>where-to-look</strong> problem. We propose <strong>VolumeProbe</strong>, a plug-and-play framework that replaces random cropping with an offline coarse-to-fine probe bank guided by <strong>anatomy-awareness, informativeness, and diversity</strong>. We instantiate VolumeProbe as a lightweight <strong>Lite</strong> variant using geometric and image-statistical cues, and a diagnostic <strong>Feat</strong> variant using frozen visual features, to examine whether lightweight volume-intrinsic priors suffice or richer semantic cues reliably provide additional value. Extensive experiments across multiple 3D medical SSL backbones and downstream tasks demonstrate that <strong>VolumeProbe-Lite</strong> consistently improves transfer performance over random sampling. Mechanistic analyses further link these gains to more anatomically plausible and informative observations, reduced spatial redundancy, more efficient learning dynamics, and more structured representations.</p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -139,9 +141,9 @@
           </div>
           <div class="method-player" data-method-player>
             <div class="method-stage">
-              <video id="method-video" controls muted playsinline preload="metadata" poster="static/images/method-poster.jpg?v=20261013-explanatory-final" aria-label="How VolumeProbe works: a silent, four-chapter method animation" aria-describedby="method-chapter-detail">
-                <source src="static/videos/volumeprobe-how-it-works.mp4?v=20261013-explanatory-final" type="video/mp4">
-                <p>Your browser cannot play this animation. <a href="static/videos/volumeprobe-how-it-works.mp4?v=20261013-explanatory-final">Open the video</a> or <a href="static/images/method-poster.jpg?v=20261013-explanatory-final">view the static overview</a>.</p>
+              <video id="method-video" controls muted playsinline preload="metadata" poster="static/images/method-poster.jpg?v=20261013-sampling-labels" aria-label="How VolumeProbe works: a silent, four-chapter method animation" aria-describedby="method-chapter-detail">
+                <source src="static/videos/volumeprobe-how-it-works.mp4?v=20261013-sampling-labels" type="video/mp4">
+                <p>Your browser cannot play this animation. <a href="static/videos/volumeprobe-how-it-works.mp4?v=20261013-sampling-labels">Open the video</a> or <a href="static/images/method-poster.jpg?v=20261013-sampling-labels">view the static overview</a>.</p>
               </video>
             </div>
             <div class="method-start-row"><button class="method-start" type="button" data-method-start aria-controls="method-video" hidden><span aria-hidden="true">▶</span> Play walkthrough</button></div>
@@ -155,26 +157,30 @@
             </div>
           </div>
           <p class="method-player-message" data-method-message role="status" hidden></p>
-          <p class="method-player-error" data-method-error hidden>The animation could not be loaded. <a href="static/images/method-poster.jpg?v=20261013-explanatory-final">View the static overview</a> or read the chapter descriptions below.</p>
+          <p class="method-player-error" data-method-error hidden>The animation could not be loaded. <a href="static/images/method-poster.jpg?v=20261013-sampling-labels">View the static overview</a> or read the chapter descriptions below.</p>
           <div class="method-chapter-detail" id="method-chapter-detail">
             <article data-method-detail="0"><p class="method-detail-label">01 · Why sampling matters</p><h4>Same crop budget. Better observations.</h4><p>Use the same crop budget to sample anatomically plausible, informative, and diverse regions.</p></article>
             <article data-method-detail="8" hidden><p class="method-detail-label">02 · Find candidates</p><h4>Rank regions. Refine candidates.</h4><p>Keep the top 24 of 32 regions, then refine and re-score their centers and axial neighbors.</p></article>
-            <article data-method-detail="24" hidden><p class="method-detail-label">03 · Build the bank</p><h4>Balance quality and coverage.</h4><p>Select and cache 40 crop centers, balancing anatomy and information with a soft redundancy penalty.</p></article>
-            <article data-method-detail="42" hidden><p class="method-detail-label">04 · Sample and train</p><h4>Build once. Sample throughout training.</h4><p>Sample a cached center uniformly, add local jitter, and crop. The bank remains fixed. The SSL architecture and objective are unchanged.</p></article>
+            <article data-method-detail="24" hidden><p class="method-detail-label">03 · Build the bank</p><h4>Balance quality and coverage.</h4><p>Cache 40 crop-center coordinates for each volume, balancing anatomy and information with a soft redundancy penalty.</p></article>
+            <article data-method-detail="42" hidden><p class="method-detail-label">04 · Sample and train</p><h4>One bank per volume, built once.</h4><p>Sample a center uniformly from this volume’s fixed bank <i>B(x)</i> → add local jitter → crop → <strong>unchanged SSL training.</strong></p></article>
           </div>
           <details class="method-variants">
             <summary>Lite and Feat <span>Same pipeline, different scoring cues</span></summary>
-            <div><p><strong>VolumeProbe-Lite</strong>, shown above, uses geometric priors and image statistics: position and boundary distance for anatomy-awareness, and gradient and entropy cues for informativeness. It requires no organ segmentation.</p><p><strong>VolumeProbe-Feat</strong> is a diagnostic variant using a frozen encoder, prototype similarity (ProtoSim), and feature variance (FeatVar). Both variants share candidate refinement, bank construction, and sampling.</p></div>
+            <div><p><strong>VolumeProbe-Lite</strong>, the default shown above, uses geometric priors and image statistics: position and boundary distance for anatomy-awareness, and gradient and entropy cues for informativeness. No organ labels or external encoder are required.</p><p><strong>VolumeProbe-Feat</strong> is a diagnostic variant using a frozen external encoder, prototype similarity (ProtoSim), and feature variance (FeatVar). Both variants share candidate refinement, bank construction, and sampling.</p></div>
           </details>
-          <noscript><p class="no-script">Use the video’s native controls to watch the walkthrough. The four stages are candidate refinement, greedy selection with a soft redundancy penalty, caching 40 normalized crop centers, and uniform sampling with local jitter during pretraining. The bank remains fixed.</p></noscript>
+          <noscript><p class="no-script">Use the video’s native controls to watch the walkthrough. Build one bank of 40 normalized crop centers per volume, then uniformly sample a center, add local jitter, and crop. Each bank stays fixed; the SSL backbone and objective are unchanged.</p></noscript>
         </div>
-        <figure class="paper-figure">
-          <div class="media-slot framework-slot" data-image="framework" data-alt="Figure 3. Coarse-to-fine candidates are scored and selected into an offline probe bank. Pretraining samples cached centers with local jitter.">
-            <div class="media-placeholder"><span class="placeholder-index">FIGURE 3</span><span class="placeholder-title">VolumeProbe framework</span></div>
+        <details class="content-disclosure method-reference" id="framework">
+          <summary>Full framework <span class="disclosure-meta">Figure 3 · Technical details</span></summary>
+          <div class="disclosure-content">
+            <figure class="paper-figure">
+              <div class="media-slot framework-slot" data-image="framework" data-alt="Figure 3. Coarse-to-fine candidates are scored and selected into an offline probe bank B(x) for each volume. Pretraining samples that volume’s cached centers with local jitter, keeping the SSL backbone and objective unchanged.">
+                <div class="media-placeholder"><span class="placeholder-index">FIGURE 3</span><span class="placeholder-title">VolumeProbe framework</span></div>
+              </div>
+              <figcaption>One bank per volume → sample a center → add local jitter → crop → unchanged SSL training.</figcaption>
+            </figure>
           </div>
-          <figcaption>Generate candidates → score and select → cache a probe bank → sample during pretraining.</figcaption>
-        </figure>
-        <p class="method-note"><strong>VolumeProbe-Lite</strong> uses geometry and image statistics. <strong>VolumeProbe-Feat</strong> tests frozen visual features as a diagnostic variant.</p>
+        </details>
       </div>
     </section>
 
@@ -186,7 +192,7 @@
         </header>
         <div class="result-highlights" aria-label="Main-table result highlights">
           <article class="result-highlight highlight-green"><h3>Low-label segmentation</h3><p class="highlight-value">+4.69<span> Dice points</span></p><p class="highlight-detail">WORD · 1% labels</p><p class="highlight-note">VoCo → VoCo + Lite · 64.24 → 68.93</p></article>
-          <article class="result-highlight highlight-blue"><h3>Consistent improvements</h3><p class="highlight-value">45 / 45</p><p class="highlight-detail">Backbone–setting comparisons</p><p class="highlight-note">Lite improves each matched SSL baseline</p></article>
+          <article class="result-highlight highlight-blue"><h3>Matched comparisons improve</h3><p class="highlight-value">45 / 45</p><p class="highlight-detail">Mean performance gains</p><p class="highlight-note">Lite across three SSL backbones</p><details class="comparison-breakdown"><summary>How the 45 are counted</summary><p><strong>36 segmentation</strong> (3 backbones × 4 datasets × 3 label settings) + <strong>3 classification</strong> (3 × 1 dataset) + <strong>6 registration</strong> (3 × 2 datasets).</p><p>VolumeProbe-Lite improves the mean over each matched random-cropping baseline in Tables 1–2. This count does not indicate statistical significance.</p></details></article>
           <article class="result-highlight highlight-purple"><h3>Across downstream tasks</h3><p class="highlight-value">7<span> datasets · </span>3<span> tasks</span></p><p class="highlight-detail"><span class="highlight-task-label" title="Segmentation · classification · registration"><span class="highlight-task-original">Segmentation · classification · registration</span><span class="highlight-task-short" aria-hidden="true">Seg. · Cls. · Reg.</span></span></p><p class="highlight-note">VoCo · S2DC · MedGMAE</p></article>
         </div>
         <div id="performance-bars" hidden></div>

@@ -20,8 +20,8 @@ window.VOLUMEPROBE_CONFIG = {
     analysisAssociation: "static/images/volumeprobe_cross_strategy_heatmap.png" // Figure 9
   },
   videos: {
-    method: "static/videos/volumeprobe-how-it-works.mp4?v=20261013-explanatory-final",
-    methodPoster: "static/images/method-poster.jpg?v=20261013-explanatory-final"
+    method: "static/videos/volumeprobe-how-it-works.mp4?v=20261013-sampling-labels",
+    methodPoster: "static/images/method-poster.jpg?v=20261013-sampling-labels"
   },
   bibtex: ""                   // Paste a multiline entry between backticks.
 };

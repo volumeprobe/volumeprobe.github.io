@@ -1,6 +1,22 @@
 (() => {
   "use strict";
 
+  // A navigation link or shared fragment also opens the requested reference.
+  const openLinkedDisclosure = hash => {
+    let id;
+    try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
+    let disclosure = document.getElementById(id)?.closest("details");
+    while (disclosure) {
+      disclosure.open = true;
+      disclosure = disclosure.parentElement?.closest("details");
+    }
+  };
+  openLinkedDisclosure(window.location.hash);
+  window.addEventListener("hashchange", () => openLinkedDisclosure(window.location.hash));
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener("click", () => openLinkedDisclosure(link.hash));
+  });
+
   const setupReveals = () => {
     const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (motionPreference.matches || !("IntersectionObserver" in window)) return;
