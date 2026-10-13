@@ -5,6 +5,9 @@
   if (!root) return;
   const player = root.querySelector("[data-method-player]");
   const video = root.querySelector("video");
+  const source = video.querySelector("source");
+  const config = window.VOLUMEPROBE_CONFIG?.videos || {};
+  const mediaURL = config.method || source?.getAttribute("src") || video.getAttribute("src");
   const controls = root.querySelector("[data-method-controls]");
   const toggle = root.querySelector("[data-method-toggle]");
   const replay = root.querySelector("[data-method-replay]");
@@ -14,6 +17,8 @@
   const time = root.querySelector("[data-method-time]");
   const message = root.querySelector("[data-method-message]");
   const error = root.querySelector("[data-method-error]");
+  const retry = root.querySelector("[data-method-retry]");
+  const direct = root.querySelector("[data-method-direct]");
   const chapters = [...root.querySelectorAll("[data-method-chapter]")];
   const details = [...root.querySelectorAll("[data-method-detail]")];
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -26,6 +31,10 @@
   let pendingPlay = false;
   let requestId = 0;
   let failed = false;
+  let retryTimer = 0;
+  let retryCount = 0;
+  let resumeTime = 0;
+  let playAfterRecovery = false;
 
   const seconds = () => Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 52;
   const stamp = value => `${Math.floor(value / 60)}:${String(Math.floor(value % 60)).padStart(2, "0")}`;
@@ -102,20 +111,59 @@
     }
   };
   const prepare = () => {
-    if (ready || failed) return;
+    if (video.error || video.readyState < 1 || (ready && !failed)) return;
+    window.clearTimeout(retryTimer);
+    retryTimer = 0;
+    failed = false;
     ready = true;
+    error.hidden = true;
+    showMessage("");
     video.controls = false;
     video.tabIndex = -1;
     controls.hidden = false;
     chapters.forEach(button => { button.disabled = false; });
     if (motion.matches || !("IntersectionObserver" in window)) start.hidden = false;
+    if (resumeTime > 0) {
+      video.currentTime = Math.min(resumeTime, seconds());
+      resumeTime = 0;
+    }
     syncTime();
     syncPlayback();
-    considerAutoplay();
+    if (playAfterRecovery) {
+      playAfterRecovery = false;
+      play(true);
+    } else considerAutoplay();
+  };
+  const reloadMedia = (manual = false) => {
+    window.clearTimeout(retryTimer);
+    retryTimer = 0;
+    retryCount += 1;
+    requestId += 1;
+    ready = false;
+    failed = false;
+    pendingPlay = false;
+    automaticallyPaused = false;
+    attemptedAutoplay = false;
+    playAfterRecovery = manual;
+    if (manual) userPaused = false;
+    error.hidden = true;
+    controls.hidden = true;
+    start.hidden = true;
+    showMessage("Reloading the animation…");
+    // Retry this asset with a fresh cache key after a transient source failure.
+    const url = new URL(mediaURL, document.baseURI);
+    url.searchParams.set("vp_retry", String(Date.now()));
+    if (source) source.src = url.href;
+    else video.src = url.href;
+    if (direct) direct.href = url.href;
+    video.load();
   };
   const handleError = () => {
-    if (failed) return;
+    // A superseded <source> request can fail after the current video is ready.
+    if (failed || (!video.error && video.readyState >= 1)) return;
     failed = true;
+    ready = false;
+    resumeTime = Math.max(resumeTime, video.currentTime || 0);
     requestId += 1;
     pendingPlay = false;
     automaticallyPaused = false;
@@ -130,7 +178,16 @@
       button.disabled = true;
       button.removeAttribute("aria-current");
     });
+    // One automatic retry; persistent failures retain an explicit recovery path.
+    if (retryCount === 0) {
+      error.hidden = true;
+      showMessage("Retrying the animation…");
+      retryTimer = window.setTimeout(() => reloadMedia(), 300);
+    }
   };
+
+  retry?.addEventListener("click", () => reloadMedia(true));
+  if (direct && mediaURL) direct.href = mediaURL;
 
   toggle.addEventListener("click", () => {
     if (video.paused || video.ended) play(true);
@@ -159,6 +216,7 @@
     syncTime();
   });
   video.addEventListener("loadedmetadata", prepare);
+  video.addEventListener("canplay", prepare);
   video.addEventListener("durationchange", syncTime);
   video.addEventListener("timeupdate", syncTime);
   video.addEventListener("seeked", syncTime);
@@ -171,7 +229,7 @@
     syncPlayback();
   });
   video.addEventListener("error", handleError);
-  video.querySelector("source")?.addEventListener("error", handleError);
+  source?.addEventListener("error", handleError);
 
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(entries => {
@@ -218,14 +276,15 @@
     });
   }
 
-  const config = window.VOLUMEPROBE_CONFIG?.videos || {};
   if (config.methodPoster) video.poster = config.methodPoster;
-  const source = video.querySelector("source");
-  if (config.method && source.getAttribute("src") !== config.method) {
+  if (config.method && source && source.getAttribute("src") !== config.method) {
     source.src = config.method;
     video.load();
   }
   // A cached source error can occur before this deferred script attaches listeners.
-  if (video.error || video.networkState === video.NETWORK_NO_SOURCE) handleError();
+  if (video.error) handleError();
   else if (video.readyState >= 1) prepare();
+  else window.setTimeout(() => {
+    if (!ready && video.networkState === video.NETWORK_NO_SOURCE) handleError();
+  }, 0);
 })();

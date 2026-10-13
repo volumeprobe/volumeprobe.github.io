@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="static/css/figure-lightbox.css">
   <link rel="stylesheet" href="static/css/results.css?v=20261013-disclosures">
   <link rel="stylesheet" href="static/css/performance-bars.css">
-  <link rel="stylesheet" href="static/css/method-player.css?v=20261013-disclosures">
+  <link rel="stylesheet" href="static/css/method-player.css?v=20261013-playback-recovery">
   <link rel="stylesheet" href="static/css/analysis-interactive.css?v=20261012-analysis7">
   <script src="static/js/config.js?v=20261013-sampling-labels" defer></script>
   <script src="static/js/results-data.js" defer></script>
@@ -29,7 +29,7 @@
   <script src="static/js/analysis-regions.js?v=20261012-analysis7" defer></script>
   <script src="static/js/analysis-cases.js?v=20261012-analysis4" defer></script>
   <script src="static/js/analysis-interactive.js?v=20261012-analysis6" defer></script>
-  <script src="static/js/method-player.js?v=20261013-explanatory-final" defer></script>
+  <script src="static/js/method-player.js?v=20261013-playback-recovery" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -157,7 +157,7 @@
             </div>
           </div>
           <p class="method-player-message" data-method-message role="status" hidden></p>
-          <p class="method-player-error" data-method-error hidden>The animation could not be loaded. <a href="static/images/method-poster.jpg?v=20261013-sampling-labels">View the static overview</a> or read the chapter descriptions below.</p>
+          <p class="method-player-error" data-method-error hidden>The animation could not be loaded. <button class="method-retry" type="button" data-method-retry>Retry video</button> <a data-method-direct href="static/videos/volumeprobe-how-it-works.mp4?v=20261013-sampling-labels" target="_blank" rel="noopener noreferrer">Open video directly</a> or <a href="static/images/method-poster.jpg?v=20261013-sampling-labels">view the static overview</a>.</p>
           <div class="method-chapter-detail" id="method-chapter-detail">
             <article data-method-detail="0"><p class="method-detail-label">01 · Why sampling matters</p><h4>Same crop budget. Better observations.</h4><p>Use the same crop budget to sample anatomically plausible, informative, and diverse regions.</p></article>
             <article data-method-detail="8" hidden><p class="method-detail-label">02 · Find candidates</p><h4>Rank regions. Refine candidates.</h4><p>Keep the top 24 of 32 regions, then refine and re-score their centers and axial neighbors.</p></article>
